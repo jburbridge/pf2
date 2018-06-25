@@ -38,7 +38,11 @@ Stack::Stack()
 Stack::Stack(const Stack& s)
 {
     if(s.isEmpty())
+    {
+        top = nullptr;
+        size = 0;
         return;
+    }
 
     //If the Stack s is not empty, there is at least one node. Copy it.
     StackNode* ptr = s.top;
