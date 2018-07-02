@@ -28,11 +28,7 @@ void print()
     for(int i = 0; i < ROWS; i++)
     {
         for(int j = 0; j < COLS; j++)
-        {
-            cout << grid[i][j] << " ";    const int ROWS = 10;
-    const int COLS = 10;
-    char grid[ROWS][COLS];
-        }
+            cout << grid[i][j] << " ";
         cout << "\n";
     }
 }
