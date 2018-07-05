@@ -47,7 +47,7 @@ double fasterExp(int x, int p)
 int main()
 {
     int x = 5;
-    int p = 100;
+    int p = 20;
 
     cout << x << "^" << p << " = " << fastExp(x, p) << "\n";
     cout << x << "^" << p << " = " << fasterExp(x, p) << "\n";
