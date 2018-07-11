@@ -15,20 +15,28 @@ public:
     BinarySearchTree();
     ~BinarySearchTree();
 
+    //Main operations
     bool search(const int value) const;
     void insert(const int value);
     bool remove(const int value);
-    void print() const;
+
+    //Print functions
+    void printPreorder() const;
+    void printInorder() const;
+    void printPostorder() const;
 
 private:
     BSTNode* root;
-    BSTNode* parent(BSTNode* current, BSTNode* child);
+
+    //Helper functions for recursive algorithms
     void destructHelper(BSTNode* current);
     bool searchHelper(const int value, BSTNode* current) const;
     void insertHelper(const int value, BSTNode*& current);
     BSTNode* removeHelper(const int value, BSTNode*& current);
-    BSTNode* deleteNode(BSTNode* toDelete);
-    void printHelper(BSTNode* current) const;
+
+    void printPreorderHelper(const BSTNode* current) const;
+    void printInorderHelper(const BSTNode* current) const;
+    void printPostorderHelper(const BSTNode* current) const;
 };
 
 BinarySearchTree::BinarySearchTree()
@@ -147,18 +155,54 @@ BSTNode* BinarySearchTree::removeHelper(const int value, BSTNode*& current)
     return current;
 }
 
-void BinarySearchTree::print() const
+void BinarySearchTree::printPreorder() const
 {
-    printHelper(root);
+    cout << "Preorder: ";
+    printPreorderHelper(root);
+    cout << "\n";
 }
 
-void BinarySearchTree::printHelper(BSTNode* current) const
+void BinarySearchTree::printPreorderHelper(const BSTNode* current) const
 {
     if(current != nullptr)
     {
-        printHelper(current->left);
         cout << current->value << " ";
-        printHelper(current->right);
+        printPreorderHelper(current->left);
+        printPreorderHelper(current->right);
+    }
+}
+
+void BinarySearchTree::printInorder() const
+{
+    cout << "Inorder: ";
+    printInorderHelper(root);
+    cout << "\n";
+}
+
+void BinarySearchTree::printInorderHelper(const BSTNode* current) const
+{
+    if(current != nullptr)
+    {
+        printInorderHelper(current->left);
+        cout << current->value << " ";
+        printInorderHelper(current->right);
+    }
+}
+
+void BinarySearchTree::printPostorder() const
+{
+    cout << "Postorder: ";
+    printPostorderHelper(root);
+    cout << "\n";
+}
+
+void BinarySearchTree::printPostorderHelper(const BSTNode* current) const
+{
+    if(current != nullptr)
+    {
+        printPostorderHelper(current->left);
+        printPostorderHelper(current->right);
+        cout << current->value << " ";
     }
 }
 
@@ -177,16 +221,18 @@ int main()
     b.insert(6);
     b.insert(9);
 
-    b.print();
-    cout << "\n";
+    b.printInorder();
 
     cout << (b.search(3) ? "3 is in the tree" : "3 is not in the tree") << "\n";
     cout << (b.search(7) ? "7 is in the tree" : "7 is not in the tree") << "\n";
     cout << (b.search(14) ? "14 is in the tree" : "14 is not in the tree") << "\n";
 
     b.remove(7);
-    b.print();
-    cout << "\n";
+
+    b.printPreorder();
+    b.printInorder();
+    b.printPostorder();
+
 
    /* b.remove(6);
     b.print();
