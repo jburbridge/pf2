@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class BSTNode
@@ -20,6 +21,9 @@ public:
     void insert(const int value);
     bool remove(const int value);
 
+    void printPathsIterative() const;
+    void printPathsRecursive() const;
+
     //Print functions
     void printPreorder() const;
     void printInorder() const;
@@ -27,12 +31,14 @@ public:
 
 private:
     BSTNode* root;
+    int size;
 
     //Helper functions for recursive algorithms
     void destructHelper(BSTNode* current);
     bool searchHelper(const int value, BSTNode* current) const;
     void insertHelper(const int value, BSTNode*& current);
     BSTNode* removeHelper(const int value, BSTNode*& current);
+    void printPathsRecursiveHelper(BSTNode* current, int path[], int& pathLength) const;
 
     void printPreorderHelper(const BSTNode* current) const;
     void printInorderHelper(const BSTNode* current) const;
@@ -42,6 +48,7 @@ private:
 BinarySearchTree::BinarySearchTree()
 {
     root = nullptr;
+    size = 0;
 }
 
 
@@ -90,6 +97,7 @@ void BinarySearchTree::insertHelper(const int value, BSTNode*& current)
         current->value = value;
         current->left = nullptr;
         current->right = nullptr;
+        size++;
     }
 
     else if(current->value >= value)
@@ -206,6 +214,97 @@ void BinarySearchTree::printPostorderHelper(const BSTNode* current) const
     }
 }
 
+void BinarySearchTree::printPathsIterative() const
+{
+    int i = 0;
+    int iprev = 0;
+    int path[size];
+    BSTNode* current = root;
+
+    //This vector will hold all the "forks" in the tree that we skipped over.
+    //Every time we hit a fork, save it here. We'll return when we finish the path we're on.
+    vector<BSTNode*> forks;
+
+    while(current != nullptr)
+    {
+        //Add the current node to the path
+        path[i++] = current->value;
+
+        //If this is a leaf node, print the whole path
+        if(current->left == nullptr && current->right == nullptr)
+        {
+            for(int index = 0; index < i; index++)
+                cout << path[index] << " ";
+            cout << "\n";
+
+            //If necessary, return to the most recent fork in the path and continue right
+            if(forks.empty())
+                current = nullptr;
+            else
+            {
+                current = forks.back();
+                forks.pop_back();
+                i = iprev;
+                current = current->right;
+            }
+        }
+
+        //If this node has only a left child, search that way
+        else if(current->right == nullptr)
+            current = current->left;
+
+        //If this node has only a right child, search that way
+        else if(current->left == nullptr)
+            current = current->right;
+
+        //Otherwise, we're at a fork. Save a pointer to this node, and we'll return to it later.
+        //For now, go left. (The first if statement in this block will handle the right child).
+        else
+        {
+            forks.push_back(current);
+            iprev = i;
+            current = current->left;
+        }
+
+    }
+}
+
+void BinarySearchTree::printPathsRecursive() const
+{
+    int pathLength = 0;
+    int path[size];
+    printPathsRecursiveHelper(root, path, pathLength);
+}
+
+void BinarySearchTree::printPathsRecursiveHelper(BSTNode* current, int path[], int& pathLength) const
+{
+    //If this node doesn't exist, do nothing
+    if(current == nullptr)
+        return;
+
+    //Add the current node to our path before visiting all paths below
+    path[pathLength] = current->value;
+    pathLength++;
+
+    //If this is a leaf node, print the current path
+    if (current->left == nullptr && current->right == nullptr)
+    {
+        for(int i = 0; i < pathLength; i++)
+            cout << path[i] << " ";
+        cout << "\n";
+    }
+
+    //Otherwise, visit its children
+    else
+    {
+        printPathsRecursiveHelper(current->left, path, pathLength);
+        printPathsRecursiveHelper(current->right, path, pathLength);
+    }
+
+    //We found all paths involving this node, so "remove" it from the array
+    pathLength--;
+}
+
 int main()
 {
     BinarySearchTree b;
@@ -227,12 +326,11 @@ int main()
     cout << (b.search(7) ? "7 is in the tree" : "7 is not in the tree") << "\n";
     cout << (b.search(14) ? "14 is in the tree" : "14 is not in the tree") << "\n";
 
-    b.remove(7);
+    cout << "\nPrint all paths iteratively:\n";
+    b.printPathsIterative();
 
-    b.printPreorder();
-    b.printInorder();
-    b.printPostorder();
-
+    cout << "\nPrint all paths recursively:\n";
+    b.printPathsRecursive();
 
    /* b.remove(6);
     b.print();
