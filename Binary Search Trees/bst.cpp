@@ -224,6 +224,7 @@ void BinarySearchTree::printPathsIterative() const
     //This vector will hold all the "forks" in the tree that we skipped over.
     //Every time we hit a fork, save it here. We'll return when we finish the path we're on.
     vector<BSTNode*> forks;
+    vector<int> prevLengths;
 
     while(current != nullptr)
     {
@@ -244,7 +245,8 @@ void BinarySearchTree::printPathsIterative() const
             {
                 current = forks.back();
                 forks.pop_back();
-                i = iprev;
+                i = prevLengths.back();
+                prevLengths.pop_back();
                 current = current->right;
             }
         }
@@ -262,7 +264,7 @@ void BinarySearchTree::printPathsIterative() const
         else
         {
             forks.push_back(current);
-            iprev = i;
+            prevLengths.push_back(i);
             current = current->left;
         }
 
