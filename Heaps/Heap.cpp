@@ -126,7 +126,7 @@ int Heap::right(const int i)
 
 int Heap::parent(const int i)
 {
-    return ceil(i/2) - 1;
+    return (i-1)/2;
 }
 
 void Heap::swap(int& a, int& b)
@@ -199,7 +199,7 @@ int main()
 {
     srand(time(NULL));
 
-    int size = 10;
+    int size = 20;
 
     Heap h(size);
 
