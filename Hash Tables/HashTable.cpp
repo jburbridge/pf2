@@ -20,6 +20,7 @@ private:
     T* table;
     int tableSize;
 
+    int find(int key) const;
     int hash(int key) const;
 
 };
@@ -45,50 +46,25 @@ HashTable<T>::~HashTable()
 template <class T>
 bool HashTable<T>::contains(int key) const
 {
-    int index = hash(key);
-
-    //Check that what's stored in the table has a key that matches our query
-    //TO DO: This will loop forever if the hash table is completely full. Fix this later.
-    while(table[index] != nullptr && table[index]->key() != key)
-        index = (index + 1) % tableSize;
-
-    return table[index];
+    return table[find(key)] != nullptr;
 }
 
 template <class T>
 T HashTable<T>::retrieve(int key) const
 {
-    int index = hash(key);
-
-    //Check that what's stored in the table has a key that matches our query
-    //TO DO: This will loop forever if the hash table is completely full. Fix this later.
-    while(table[index] != nullptr && table[index]->key() != key)
-        index = (index + 1) % tableSize;
-
-    return table[index];
+    return table[find(key)];
 }
 
 template <class T>
 void HashTable<T>::insert(int key, T node)
 {
-    int index = hash(key);
-
-    //Linear probing
-    while(table[index] != nullptr)
-        index = (index + 1) % tableSize;
-
-    table[index] = node;
+    table[find(key)] = node;
 }
 
 template <class T>
 bool HashTable<T>::remove(int key)
 {
-    int index = hash(key);
-
-    //Check that what's stored in the table has a key that matches our query
-    //TO DO: This will loop forever if the hash table is completely full. Fix this later.
-    while(table[index] != nullptr && table[index]->key() != key)
-        index = (index + 1) % tableSize;
+    int index = find(key);
 
     //We didn't find the record
     if(table[index] == nullptr)
@@ -106,9 +82,19 @@ bool HashTable<T>::remove(int key)
 template <class T>
 void HashTable<T>::print() const
 {
+    cout << "___Table contents___\n";
     for(int i = 0; i < tableSize; i++)
         if(table[i] != nullptr)
             table[i]->print();
+}
+
+template <class T>
+int HashTable<T>::find(int key) const
+{
+    int index = hash(key);
+    while(table[index] != nullptr && table[index]->key() != key)
+        index = (index + 1) % tableSize;
+    return index;
 }
 
 template <class T>
@@ -220,6 +206,7 @@ int main()
     }
 
     database.close();
+
     ht.print();
 
     cout << "\nTesting contains() function...\n";
