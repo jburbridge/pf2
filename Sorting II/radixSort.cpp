@@ -22,7 +22,7 @@ void radixSort(int* data, int size, int numDigits)
         int count[10];
         int extra[size];
 
-        //Assuming base 10, we'll count occurances of each digit
+        //Assuming base 10, we'll count occurrences of each digit
         for(int i = 0; i < 10; i++)
             count[i] = 0;
 
@@ -44,6 +44,10 @@ void radixSort(int* data, int size, int numDigits)
         //Copy extra back into data for the next round
         for(int i = 0; i < size; i++)
             data[i] = extra[i];
+
+        //Let's print this array on each iteration so we can watch the algorithm progress
+        cout << "\nAfter sorting on digit " << d << ":\n";
+        print(data, size);
     }
 }
 
