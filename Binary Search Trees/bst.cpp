@@ -4,45 +4,45 @@ using namespace std;
 
 class BSTNode
 {
-public:
-    int value;
-    BSTNode* left;
-    BSTNode* right;
+  public:
+      int value;
+      BSTNode* left;
+      BSTNode* right;
 };
 
 class BinarySearchTree
 {
-public:
-    BinarySearchTree();
-    ~BinarySearchTree();
+  public:
+      BinarySearchTree();
+      ~BinarySearchTree();
 
-    //Main operations
-    bool search(const int value) const;
-    void insert(const int value);
-    bool remove(const int value);
+      //Main operations
+      bool search(const int value) const;
+      void insert(const int value);
+      bool remove(const int value);
 
-    void printPathsIterative() const;
-    void printPathsRecursive() const;
+      void printPathsIterative() const;
+      void printPathsRecursive() const;
 
-    //Print functions
-    void printPreorder() const;
-    void printInorder() const;
-    void printPostorder() const;
+      //Print functions
+      void printPreorder() const;
+      void printInorder() const;
+      void printPostorder() const;
 
-private:
-    BSTNode* root;
-    int size;
+  private:
+      BSTNode* root;
+      int size;
 
-    //Helper functions for recursive algorithms
-    void destructHelper(BSTNode* current);
-    bool searchHelper(const int value, BSTNode* current) const;
-    void insertHelper(const int value, BSTNode*& current);
-    BSTNode* removeHelper(const int value, BSTNode*& current);
-    void printPathsRecursiveHelper(BSTNode* current, int path[], int& pathLength) const;
+      //Helper functions for recursive algorithms
+      void destructHelper(BSTNode* current);
+      bool searchHelper(const int value, BSTNode* current) const;
+      void insertHelper(const int value, BSTNode*& current);
+      BSTNode* removeHelper(const int value, BSTNode*& current);
+      void printPathsRecursiveHelper(BSTNode* current, int path[], int& pathLength) const;
 
-    void printPreorderHelper(const BSTNode* current) const;
-    void printInorderHelper(const BSTNode* current) const;
-    void printPostorderHelper(const BSTNode* current) const;
+      void printPreorderHelper(const BSTNode* current) const;
+      void printInorderHelper(const BSTNode* current) const;
+      void printPostorderHelper(const BSTNode* current) const;
 };
 
 BinarySearchTree::BinarySearchTree()
@@ -50,7 +50,6 @@ BinarySearchTree::BinarySearchTree()
     root = nullptr;
     size = 0;
 }
-
 
 BinarySearchTree::~BinarySearchTree()
 {
@@ -101,10 +100,14 @@ void BinarySearchTree::insertHelper(const int value, BSTNode*& current)
     }
 
     else if(current->value >= value)
+    {
         insertHelper(value, current->left);
+    }
 
     else
+    {
         insertHelper(value, current->right);
+    }
 }
 
 bool BinarySearchTree::remove(const int value)
@@ -115,16 +118,22 @@ bool BinarySearchTree::remove(const int value)
 BSTNode* BinarySearchTree::removeHelper(const int value, BSTNode*& current)
 {
     //Node was not found, so return false
-    if(current == nullptr)
+    if (current == nullptr)
+    {
         return nullptr;
+    }
 
     //Search left
     else if(current->value > value)
+    {
         current->left = removeHelper(value, current->left);
+    }
 
     //Search right
     else if(current->value < value)
+    {
         current->right = removeHelper(value, current->right);
+    }
 
     //Node was found
     else
@@ -152,8 +161,11 @@ BSTNode* BinarySearchTree::removeHelper(const int value, BSTNode*& current)
         else
         {
             BSTNode* toDelete = current->left;
+
             while(toDelete->right != nullptr)
+            {
                 toDelete = toDelete->right;
+            }
 
             current->value = toDelete->value;
             current->left = removeHelper(toDelete->value, current->left);
@@ -334,13 +346,13 @@ int main()
     cout << "\nPrint all paths recursively:\n";
     b.printPathsRecursive();
 
-   /* b.remove(6);
+    b.remove(6);
     b.print();
     cout << "\n";
 
     b.remove(10);
     b.print();
-    cout << "\n";*/
+    cout << "\n";
 
     return 0;
 }
